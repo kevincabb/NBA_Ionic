@@ -9,6 +9,7 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { IonicStorageModule } from '@ionic/storage';
 import { AppComponent } from './app.component';
 import { UserData } from './providers/user-data';
+import { FormsModule } from '@angular/forms';
 
 describe('AppComponent', () => {
   let menuSpy,
@@ -34,7 +35,7 @@ describe('AppComponent', () => {
 
     TestBed.configureTestingModule({
       declarations: [AppComponent],
-      imports: [IonicStorageModule.forRoot()],
+      imports: [IonicStorageModule.forRoot(), FormsModule],
       schemas: [CUSTOM_ELEMENTS_SCHEMA],
       providers: [
         { provide: MenuController, useValue: menuSpy },

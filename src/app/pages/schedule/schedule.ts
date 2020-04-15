@@ -2,9 +2,12 @@ import { Component, ViewChild, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, IonList, IonRouterOutlet, LoadingController, ModalController, ToastController, Config } from '@ionic/angular';
 
-import { ScheduleFilterPage } from '../schedule-filter/schedule-filter';
+
 import { ConferenceData } from '../../providers/conference-data';
 import { UserData } from '../../providers/user-data';
+import { GamesService } from '../../providers/games.service';
+import * as moment from 'moment';
+import { PlayergameStatsService } from '../../providers/playergame-stats.service';
 
 @Component({
   selector: 'page-schedule',
@@ -25,6 +28,11 @@ export class SchedulePage implements OnInit {
   confDate: string;
   showSearchbar: boolean;
 
+  gameSchedule = [];
+  date: string; 
+  sheet: string;
+  gameId: string;
+
   constructor(
     public alertCtrl: AlertController,
     public confData: ConferenceData,
@@ -34,13 +42,39 @@ export class SchedulePage implements OnInit {
     public routerOutlet: IonRouterOutlet,
     public toastCtrl: ToastController,
     public user: UserData,
-    public config: Config
+    public config: Config,
+    private gameService: GamesService,
+    private playerService: PlayergameStatsService
   ) { }
 
   ngOnInit() {
-    this.updateSchedule();
+    this.gameService.$dateUrl.subscribe(dateurl=> {
+      this.date = dateurl;
+    });
 
+    this.playerService.$gameIdUrl.subscribe(id=> {
+      this.gameId = id;
+    });
+
+    this.date = this.gameService.getDate();
+    this.gameService.getData();
+    this.gameSchedule = this.gameService.getGame();
+    console.log(this.gameSchedule);
+
+    this.updateSchedule();
     this.ios = this.config.get('mode') === 'ios';
+  }
+
+  previousDay(){
+    this.gameService.previousDate(this.date);
+    this.gameService.getData();
+    this.gameSchedule = this.gameService.getGame();
+  }
+
+  nextDay(){
+    this.gameService.nextDate(this.date);
+    this.gameService.getData();
+    this.gameSchedule = this.gameService.getGame();
   }
 
   updateSchedule() {
@@ -55,78 +89,82 @@ export class SchedulePage implements OnInit {
     });
   }
 
-  async presentFilter() {
-    const modal = await this.modalCtrl.create({
-      component: ScheduleFilterPage,
-      swipeToClose: true,
-      presentingElement: this.routerOutlet.nativeEl,
-      componentProps: { excludedTracks: this.excludeTracks }
-    });
-    await modal.present();
-
-    const { data } = await modal.onWillDismiss();
-    if (data) {
-      this.excludeTracks = data;
-      this.updateSchedule();
-    }
+  getGameId(value){
+    this.playerService.changeGameId(value);
   }
 
-  async addFavorite(slidingItem: HTMLIonItemSlidingElement, sessionData: any) {
-    if (this.user.hasFavorite(sessionData.name)) {
-      // Prompt to remove favorite
-      this.removeFavorite(slidingItem, sessionData, 'Favorite already added');
-    } else {
-      // Add as a favorite
-      this.user.addFavorite(sessionData.name);
+  // async presentFilter() {
+  //   const modal = await this.modalCtrl.create({
+  //     component: ScheduleFilterPage,
+  //     swipeToClose: true,
+  //     presentingElement: this.routerOutlet.nativeEl,
+  //     componentProps: { excludedTracks: this.excludeTracks }
+  //   });
+  //   await modal.present();
 
-      // Close the open item
-      slidingItem.close();
+  //   const { data } = await modal.onWillDismiss();
+  //   if (data) {
+  //     this.excludeTracks = data;
+  //     this.updateSchedule();
+  //   }
+  // }
 
-      // Create a toast
-      const toast = await this.toastCtrl.create({
-        header: `${sessionData.name} was successfully added as a favorite.`,
-        duration: 3000,
-        buttons: [{
-          text: 'Close',
-          role: 'cancel'
-        }]
-      });
+  // async addFavorite(slidingItem: HTMLIonItemSlidingElement, sessionData: any) {
+  //   if (this.user.hasFavorite(sessionData.name)) {
+  //     // Prompt to remove favorite
+  //     this.removeFavorite(slidingItem, sessionData, 'Favorite already added');
+  //   } else {
+  //     // Add as a favorite
+  //     this.user.addFavorite(sessionData.name);
 
-      // Present the toast at the bottom of the page
-      await toast.present();
-    }
+  //     // Close the open item
+  //     slidingItem.close();
 
-  }
+  //     // Create a toast
+  //     const toast = await this.toastCtrl.create({
+  //       header: `${sessionData.name} was successfully added as a favorite.`,
+  //       duration: 3000,
+  //       buttons: [{
+  //         text: 'Close',
+  //         role: 'cancel'
+  //       }]
+  //     });
 
-  async removeFavorite(slidingItem: HTMLIonItemSlidingElement, sessionData: any, title: string) {
-    const alert = await this.alertCtrl.create({
-      header: title,
-      message: 'Would you like to remove this session from your favorites?',
-      buttons: [
-        {
-          text: 'Cancel',
-          handler: () => {
-            // they clicked the cancel button, do not remove the session
-            // close the sliding item and hide the option buttons
-            slidingItem.close();
-          }
-        },
-        {
-          text: 'Remove',
-          handler: () => {
-            // they want to remove this session from their favorites
-            this.user.removeFavorite(sessionData.name);
-            this.updateSchedule();
+  //     // Present the toast at the bottom of the page
+  //     await toast.present();
+  //   }
 
-            // close the sliding item and hide the option buttons
-            slidingItem.close();
-          }
-        }
-      ]
-    });
-    // now present the alert on top of all other content
-    await alert.present();
-  }
+  // }
+
+  // async removeFavorite(slidingItem: HTMLIonItemSlidingElement, sessionData: any, title: string) {
+  //   const alert = await this.alertCtrl.create({
+  //     header: title,
+  //     message: 'Would you like to remove this session from your favorites?',
+  //     buttons: [
+  //       {
+  //         text: 'Cancel',
+  //         handler: () => {
+  //           // they clicked the cancel button, do not remove the session
+  //           // close the sliding item and hide the option buttons
+  //           slidingItem.close();
+  //         }
+  //       },
+  //       {
+  //         text: 'Remove',
+  //         handler: () => {
+  //           // they want to remove this session from their favorites
+  //           this.user.removeFavorite(sessionData.name);
+  //           this.updateSchedule();
+
+  //           // close the sliding item and hide the option buttons
+  //           slidingItem.close();
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   // now present the alert on top of all other content
+  //   await alert.present();
+  // }
 
   async openSocial(network: string, fab: HTMLIonFabElement) {
     const loading = await this.loadingCtrl.create({

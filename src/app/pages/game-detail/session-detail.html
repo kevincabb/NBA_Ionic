@@ -1,0 +1,100 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button [defaultHref]="defaultHref"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="session" class="ion-padding">
+    <!-- <h1>{{session.name}}</h1>
+    <span *ngFor="let track of session?.tracks" [class]="'session-track-'+track.toLowerCase()">{{track}}</span>
+    <p>{{session.description}}</p>
+    <ion-text color="medium">
+      {{session.timeStart}} &ndash; {{session.timeEnd}}
+      <br /> {{session.location}}
+    </ion-text> -->
+  </div>
+  <ion-card>
+    <ion-card-header>
+      <ion-grid fixed>
+        <ion-row>
+          <ion-col size="12" class="text-center">{{gameDetail.playedStatus}}</ion-col>
+        </ion-row>
+        <ion-row class="ion-justify-content-between">
+          <ion-col size="3">
+            <ion-card-header class="ion-no-padding">
+              <ion-card-title class="text-center title-size">{{gameDetail.homeTeam}}</ion-card-title>
+              <ion-card-subtitle class="text-center">(14-35)</ion-card-subtitle>
+            </ion-card-header>
+          </ion-col>
+          <ion-col size="3">
+            <ion-card-header class="ion-no-padding">
+              <ion-card-title class="text-center">{{gameDetail.homeScore}}</ion-card-title>
+            </ion-card-header>
+          </ion-col>
+
+          <ion-col size="3">
+            <ion-card-header class="ion-no-padding">
+              <ion-card-title class="text-center">{{gameDetail.awayScore}}</ion-card-title>
+            </ion-card-header>
+          </ion-col>
+          <ion-col size="3">
+            <ion-card-header class="ion-no-padding">
+              <ion-card-title class="text-center title-size">{{gameDetail.awayTeam}}</ion-card-title>
+              <ion-card-subtitle class="text-center">(14-35)</ion-card-subtitle>
+            </ion-card-header>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col size="4">
+
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      <ion-item-group>
+        <ion-item-divider>
+          <ion-label>Team</ion-label>
+          <ion-grid fixed>
+            <ion-row class="ion-justify-content-end">
+              <ion-col size="2" class="text-right text-size-sm">1ST</ion-col>
+              <ion-col size="2" class="text-right text-size-sm">2ND</ion-col>
+              <ion-col size="2" class="text-right text-size-sm">3RD</ion-col>
+              <ion-col size="2" class="text-right text-size-sm">4TH</ion-col>
+              <ion-col size="2" class="text-right text-size-sm">TOT</ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item-divider>
+        <ion-item-divider>
+          <ion-label>{{gameDetail.homeTeam}}</ion-label>
+          <ion-grid fixed>
+            <ion-row class="ion-justify-content-end">
+              <ion-col size="2" class="text-center text-size-sm">{{gameDetail.qScore[0].home}}</ion-col>
+              <ion-col size="2" class="text-center text-size-sm">{{gameDetail.qScore[1].home}}</ion-col>
+              <ion-col size="2" class="text-center text-size-sm">{{gameDetail.qScore[2].home}}</ion-col>
+              <ion-col size="2" class="text-center text-size-sm">{{gameDetail.qScore[3].home}}</ion-col>
+              <ion-col size="2" class="text-center text-size-sm">{{gameDetail.homeScore}}</ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item-divider>
+        <ion-item-divider>
+          <ion-label>{{gameDetail.awayTeam}}</ion-label>
+          <ion-grid fixed>
+            <ion-row class="ion-justify-content-end">
+              <ion-col size="2" class="text-center text-size-sm">{{gameDetail.qScore[0].away}}</ion-col>
+              <ion-col size="2" class="text-center text-size-sm">{{gameDetail.qScore[1].away}}</ion-col>
+              <ion-col size="2" class="text-center text-size-sm">{{gameDetail.qScore[2].away}}</ion-col>
+              <ion-col size="2" class="text-center text-size-sm">{{gameDetail.qScore[3].away}}</ion-col>
+              <ion-col size="2" class="text-center text-size-sm">{{gameDetail.awayScore}}</ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item-divider>
+      </ion-item-group>
+    </ion-card-header>
+    <ion-card-content>
+    </ion-card-content>
+  </ion-card>
+
+  <app-table [gameDetail]="gameDetail"></app-table>
+</ion-content>
