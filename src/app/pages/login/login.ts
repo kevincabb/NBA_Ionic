@@ -18,9 +18,14 @@ export class LoginPage {
   submitted = false;
 
   constructor(
-    public userData: UserData,
+    private userData: UserData,
     public router: Router
   ) { }
+
+  ngOnInit(){
+    this.userData.GetCredetials();
+    console.log(this.userData.get());
+  }
 
   onLogin(form: NgForm) {
     this.submitted = true;

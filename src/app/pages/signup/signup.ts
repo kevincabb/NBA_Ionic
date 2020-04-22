@@ -21,6 +21,13 @@ export class SignupPage {
     public userData: UserData
   ) {}
 
+  ngOnInit(){
+    this.userData.addCredential({
+      "userName": "kev",
+      "password": "12345"
+    }).subscribe(x => console.log(x));
+  }
+
   onSignup(form: NgForm) {
     this.submitted = true;
 

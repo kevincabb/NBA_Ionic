@@ -1,19 +1,45 @@
 import { Injectable } from '@angular/core';
 import { Storage } from '@ionic/storage';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserData {
+  apiUrl = environment.api;
+  url = this.apiUrl + 'credential';
+  addCredUrl = this.apiUrl + 'credential';
+  urlSheet;
+  credentials: UserData[] = [];
   favorites: string[] = [];
   HAS_LOGGED_IN = 'hasLoggedIn';
   HAS_SEEN_TUTORIAL = 'hasSeenTutorial';
 
   constructor(
-    public storage: Storage
+    public storage: Storage,
+    private http: HttpClient
   ) { }
 
+  GetCredetials(){
+    this.urlSheet = this.http.get(this.url);
+
+    this.urlSheet.subscribe(x => {
+      for (let s of x){
+        this.credentials.push(s);
+      }
+    });
+  }
+
+  get(): UserData[] {
+    return this.credentials;
+  }
+
+  addCredential(credToAdd: any){
+    return this.http.post(this.addCredUrl, credToAdd);
+  }
+  
   hasFavorite(sessionName: string): boolean {
     return (this.favorites.indexOf(sessionName) > -1);
   }
@@ -29,6 +55,14 @@ export class UserData {
     }
   }
 
+
+
+  // login(username: string): Promise<any> {
+  //   return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
+  //     this.setUsername(username);
+  //     return window.dispatchEvent(new CustomEvent('user:login'));
+  //   });
+  // }
   login(username: string): Promise<any> {
     return this.storage.set(this.HAS_LOGGED_IN, true).then(() => {
       this.setUsername(username);
