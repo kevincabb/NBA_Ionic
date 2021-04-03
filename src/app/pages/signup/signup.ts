@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { UserData } from '../../providers/user-data';
 import { UserOptions } from '../../components/interfaces/user-options';
+import { AlertController } from '@ionic/angular';
 
 
 
@@ -15,25 +16,46 @@ import { UserOptions } from '../../components/interfaces/user-options';
 export class SignupPage {
   signup: UserOptions = { username: '', password: '' };
   submitted = false;
+  check: boolean;
 
   constructor(
     public router: Router,
-    public userData: UserData
-  ) {}
-
-  ngOnInit(){
-    this.userData.addCredential({
-      "userName": "kev",
-      "password": "12345"
-    }).subscribe(x => console.log(x));
+    private userData: UserData,
+    public alertController: AlertController
+  ) {
   }
 
-  onSignup(form: NgForm) {
-    this.submitted = true;
+  ngOnInit() {
+  }
 
-    if (form.valid) {
-      this.userData.signup(this.signup.username);
-      this.router.navigateByUrl('/app/tabs/schedule');
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Alert',
+      message: 'Username taken',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
+
+  async onSignup(form: NgForm) {
+    await this.userData.SignUpBool(this.signup);
+    this.check = await this.userData.getBool();
+
+    if (!this.check) {
+      console.log('check is false');
+      this.submitted = true;
+
+      if (form.valid) {
+        this.userData.signup(this.signup.username, form.value);
+        form.reset();
+        this.router.navigateByUrl('/app/tabs/schedule');
+      }
+    } else {
+      console.log('check is true');
+      this.presentAlert();
+      form.reset();
     }
   }
 }

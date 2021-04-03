@@ -6,6 +6,7 @@ import { UserData } from '../../providers/user-data';
 import { GamesService } from '../../providers/games.service';
 import { PlayergameStatsService } from '../../providers/playergame-stats.service';
 import { Games } from '../../components/interfaces/games';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'page-session-detail',
@@ -31,19 +32,22 @@ export class SessionDetailPage {
     console.log(this.todaysGames);
     this.today(this.gameId);
 
-    if(this.gameDetail === null){
-      alert("Postpone");
-    }
+    
   }
 
   today(id){
     for(let i = 0; i < this.todaysGames[0].gamesToday.length; i++){
       if(id === this.todaysGames[0].gamesToday[i].id){
         this.gameDetail = this.todaysGames[0].gamesToday[i];
-        console.log(this.gameDetail);
       }
     }
   }
+
+
+
+
+  // Conference APP extras
+  
   // ionViewWillEnter() {
   //   this.dataProvider.load().subscribe((data: any) => {
   //     if (data && data.schedule && data.schedule[0] && data.schedule[0].groups) {

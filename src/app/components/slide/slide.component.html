@@ -1,7 +1,7 @@
 <ion-slides [options]="slideOptions" pager="true" #slider (ionSlidesDidLoad)="slidesDidLoad(slider)">
   <ion-slide *ngFor="let slide of slideData">
     <div>
-      <img class="imageH" src="{{slide.image}}" />
+      <img class="imageH" src="{{slide.image}}" style="height: 269px"/>
     </div>
   </ion-slide>
 </ion-slides>

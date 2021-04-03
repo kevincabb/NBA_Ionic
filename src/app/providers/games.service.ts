@@ -8,17 +8,16 @@ import { Games } from '../components/interfaces/games';
   providedIn: 'root'
 })
 export class GamesService {
-
   game = [];
   //API URL for station list
-  gameURL = 'https://api.mysportsfeeds.com/v2.1/pull/nba/2019-2020-regular/date/';
-  dateUrl: string = moment('20200310').format('YYYYMMDD');
+  gameURL = 'https://api.mysportsfeeds.com/v2.1/pull/nba/2020-2021-regular/date/';
+  dateUrl: string = moment('20201222').format('YYYYMMDD');
   typeUrl = '/games.json';
   gameSheet;
 
-  httpOptions = {
+   httpOptions = {
     headers: new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('ab0eac51-ac2c-41f8-8dad-15dc5c:MYSPORTSFEEDS')
+      'Authorization': 'Basic ' + btoa('1694b098-b008-4e48-ad0e-72fa5b:MYSPORTSFEEDS')
     })
   };
 
@@ -36,6 +35,11 @@ export class GamesService {
     this.$dateUrl.next(this.dateUrl);
   }
 
+  selectDate(selectedDate){
+    this.dateUrl = moment(selectedDate).format('YYYYMMDD');
+    this.$dateUrl.next(this.dateUrl);
+  }
+
   getData() {
     this.game = [];
     // http request for JSON data
@@ -43,10 +47,12 @@ export class GamesService {
 
     // stream game/s data to game variable
     this.gameSheet.subscribe(x => {
+      console.log(x);
       let day = {
-        date: moment(this.dateUrl).format('MM/DD-ddd'),
+        date: moment(this.dateUrl).format('MMM D, YYYY'),
         gamesToday: []
       }
+      
       for (let s of x.games) {
         let info: Games = {
           date: moment(s.schedule.startTime).format('MM/DD'),

@@ -13,14 +13,14 @@ export class PlayergameStatsService {
   awayStats = [];
   homestats = [];
   //API URL for station list
-  statsUrl = 'https://api.mysportsfeeds.com/v2.1/pull/nba/2019-2020-regular/games/';
+  statsUrl = 'https://api.mysportsfeeds.com/v2.1/pull/nba/2020-2021-regular/games/';
   gameIdUrl: string;
   typeU = '/boxscore.json';
   statSheet;
 
   httpOptions = {
     headers: new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('ab0eac51-ac2c-41f8-8dad-15dc5c:MYSPORTSFEEDS')
+      'Authorization': 'Basic ' + btoa('1694b098-b008-4e48-ad0e-72fa5b:MYSPORTSFEEDS')
     })
   };
 
@@ -36,7 +36,7 @@ export class PlayergameStatsService {
     // http request for JSON data
     this.statSheet = this.http.get(this.statsUrl + this.gameIdUrl+ this.typeU, this.httpOptions);
 
-    // stream station data to stops variable
+    // stream stat data to away variable
     this.statSheet.subscribe(x => {
       for (let s of x.stats.away.players) {
         let info: PlayergameStats = {
@@ -54,7 +54,7 @@ export class PlayergameStatsService {
 
       for (let s of x.stats.home.players) {
         let info: PlayergameStats = {
-          name: s.player.firstName[0] + " " + s.player.lastName,
+          name: s.player.firstName[0] + ". " + s.player.lastName,
           mins: Math.floor(s.playerStats[0].miscellaneous.minSeconds / 60),
           pts: s.playerStats[0].offense.pts,
           reb: s.playerStats[0].rebounds.reb,

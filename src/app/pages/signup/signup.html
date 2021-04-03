@@ -9,33 +9,31 @@
 
 <ion-content>
 
-  <div class="signup-logo">
-    <img src="assets/img/appicon.svg" alt="Ionic Logo">
+  <div >
+    <img class="signup-logo"src="/assets/img/freeAgency.jpg" alt="Ionic Logo">
   </div>
 
   <form #signupForm="ngForm" novalidate>
     <ion-list lines="none">
       <ion-item>
         <ion-label position="stacked" color="primary">Username</ion-label>
-        <ion-input [(ngModel)]="signup.username" name="username" type="text" #username="ngModel" required>
+        <ion-input [(ngModel)]="signup.username" [ngClass]="{'is-invalid': signupForm.submitted && username.invalid}"
+          class="form-control" name="username" type="text" #username="ngModel" required>
         </ion-input>
+        <div class="invalid-feedback">
+          <p>Username required</p>
+        </div>
       </ion-item>
-      <ion-text color="danger">
-        <p [hidden]="username.valid || submitted == false" class="ion-padding-start">
-          Username is required
-        </p>
-      </ion-text>
 
       <ion-item>
         <ion-label position="stacked" color="primary">Password</ion-label>
-        <ion-input [(ngModel)]="signup.password" name="password" type="password" #password="ngModel" required>
+        <ion-input [(ngModel)]="signup.password" [ngClass]="{'is-invalid': signupForm.submitted && password.invalid}"
+          class="form-control" id="password" name="password" type="password" #password="ngModel" required minlength="6">
         </ion-input>
+        <div *ngIf="signupForm.submitted && password.invalid" class="invalid-feedback">
+          <p *ngIf="password.errors.minlength">Password must be at least 6</p>
+        </div>
       </ion-item>
-      <ion-text color="danger">
-        <p [hidden]="password.valid || submitted == false" class="ion-padding-start">
-          Password is required
-        </p>
-      </ion-text>
     </ion-list>
 
     <div class="ion-padding">

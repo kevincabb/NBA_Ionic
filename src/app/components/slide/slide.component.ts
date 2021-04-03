@@ -9,8 +9,10 @@ import { IonSlides } from '@ionic/angular';
 export class SlideComponent implements OnInit {
 
   slideData = [
-    { image: "./assets/img/kobe.jpg" },
-    { image: "./assets/img/luka.jpg" }
+    { image: "./assets/img/nba.png" },
+    { image: "./assets/img/kobe1.png" },
+    { image: "./assets/img/harden.png" },
+    { image: "./assets/img/mj.png" },
   ]
   constructor() { }
 

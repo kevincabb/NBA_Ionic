@@ -1,7 +1,7 @@
 .login-logo {
-  padding: 20px 0;
-  min-height: 200px;
-  text-align: center;
+  padding: 0;
+  height: 200px;
+  width: 375px
 }
 
 .login-logo img {
@@ -11,3 +11,7 @@
 .list {
   margin-bottom: 0;
 }
+
+.item-highlight{
+  height: 0;
+  }

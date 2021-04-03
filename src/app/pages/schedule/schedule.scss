@@ -6,6 +6,11 @@ ion-fab-button {
   --color: var(--ion-color-primary, #3880ff);
 }
 
+.small-text{
+  font-size: small;
+  text-align: center;
+}
+
 /*
  * Material Design uses the ripple for activated
  * so only style the iOS activated background

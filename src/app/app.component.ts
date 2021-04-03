@@ -25,15 +25,15 @@ export class AppComponent implements OnInit {
       icon: 'basketball'
     },
     {
-      title: 'Live Games',
+      title: 'Games',
       url: '/app/tabs/schedule',
       icon: 'calendar'
     },
-    {
-      title: 'Players',
-      url: '/app/tabs/speakers',
-      icon: 'people'
-    }
+    // {
+    //   title: 'Players',
+    //   url: '/app/tabs/speakers',
+    //   icon: 'people'
+    // }
   ];
   loggedIn = false;
   dark = false;
@@ -111,14 +111,11 @@ export class AppComponent implements OnInit {
   }
 
   logout() {
-    this.userData.logout().then(() => {
-      return this.router.navigateByUrl('/app/tabs/schedule');
-    });
+    this.userData.logout();
+    this.router.navigateByUrl('/login');
+    // this.userData.logout().then(() => {
+    //   return this.router.navigateByUrl('/app/tabs/schedule');
+    // });
   }
 
-  openTutorial() {
-    this.menu.enable(false);
-    this.storage.set('ion_did_tutorial', false);
-    this.router.navigateByUrl('/tutorial');
-  }
 }

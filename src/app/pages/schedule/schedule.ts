@@ -29,9 +29,15 @@ export class SchedulePage implements OnInit {
   showSearchbar: boolean;
 
   gameSchedule = [];
+  accountInfo;
+  accountId: number;
   date: string; 
   sheet: string;
   gameId: string;
+  selecteDate: any;
+  seasonStartDate =  moment('20191022').format('YYYY-MM-DD');
+  seasonEndDate = moment('20201012').format('YYYY-MM-DD');
+  picker;
 
   constructor(
     public alertCtrl: AlertController,
@@ -44,8 +50,16 @@ export class SchedulePage implements OnInit {
     public user: UserData,
     public config: Config,
     private gameService: GamesService,
-    private playerService: PlayergameStatsService
-  ) { }
+    private playerService: PlayergameStatsService,
+    public alertController: AlertController
+  ) { 
+    
+    this.date = this.gameService.getDate();
+    this.selecteDate = moment(this.date).format("MM D, YYYY");
+    this.gameService.getData();
+    this.gameSchedule = this.gameService.getGame();
+    console.log(this.gameSchedule);
+  }
 
   ngOnInit() {
     this.gameService.$dateUrl.subscribe(dateurl=> {
@@ -56,23 +70,51 @@ export class SchedulePage implements OnInit {
       this.gameId = id;
     });
 
-    this.date = this.gameService.getDate();
-    this.gameService.getData();
-    this.gameSchedule = this.gameService.getGame();
-    console.log(this.gameSchedule);
+    this.accountId = this.user.idNum();
+    console.log(this.accountId);
+
+
+    
 
     this.updateSchedule();
     this.ios = this.config.get('mode') === 'ios';
   }
 
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Alert',
+      message: 'Game is Postponed',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
+  // async loadSchedule(){
+  //   this.date = this.selecteDate;
+  //   console.log(this.date);
+  //   this.gameService.selectDate(this.date);
+  //   console.log(this.date);
+  //   this.gameService.getData();
+  //   this.gameSchedule = this.gameService.getGame();
+  // }
+
   previousDay(){
     this.gameService.previousDate(this.date);
+    this.selecteDate = moment(this.date).format("MM D, YYYY");
     this.gameService.getData();
     this.gameSchedule = this.gameService.getGame();
   }
 
   nextDay(){
     this.gameService.nextDate(this.date);
+    this.selecteDate = moment(this.date).format("MM D, YYYY");
+    this.gameService.getData();
+    this.gameSchedule = this.gameService.getGame();
+    console.log(this.gameSchedule);
+  }
+
+  getNewSchedule(){
     this.gameService.getData();
     this.gameSchedule = this.gameService.getGame();
   }
@@ -89,9 +131,29 @@ export class SchedulePage implements OnInit {
     });
   }
 
-  getGameId(value){
-    this.playerService.changeGameId(value);
+  getGameId(value, status){
+    if(status === "UNPLAYED"){
+      this.presentAlert();
+    } else {
+      this.playerService.changeGameId(value);
+      this.router.navigateByUrl('/app/tabs/schedule/session/'+ value);
+    }
   }
+
+  async openSocial(network: string, fab: HTMLIonFabElement) {
+    const loading = await this.loadingCtrl.create({
+      message: `Posting to ${network}`,
+      duration: (Math.random() * 1000) + 500
+    });
+    await loading.present();
+    await loading.onWillDismiss();
+    fab.close();
+  }
+}
+
+
+  //Conference APP extras
+
 
   // async presentFilter() {
   //   const modal = await this.modalCtrl.create({
@@ -166,13 +228,4 @@ export class SchedulePage implements OnInit {
   //   await alert.present();
   // }
 
-  async openSocial(network: string, fab: HTMLIonFabElement) {
-    const loading = await this.loadingCtrl.create({
-      message: `Posting to ${network}`,
-      duration: (Math.random() * 1000) + 500
-    });
-    await loading.present();
-    await loading.onWillDismiss();
-    fab.close();
-  }
-}
+  

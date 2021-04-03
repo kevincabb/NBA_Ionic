@@ -16,25 +16,24 @@
 
   <!-- #scheduleList [hidden]="gameSchedule === 0" -->
   <ion-list >
-    <ion-item-group *ngFor="let game of gameSchedule">
+    <ion-item-group *ngFor="let game of gameSchedule ">
       <ion-item-divider sticky>
         <ion-grid fixed>
           <ion-row>
             <ion-col size="4">
               <ion-button style="width: 92px" (click)="previousDay()">
-                <ion-icon slot="start" name="chevron-back-circle-outline"></ion-icon>
-                Previous 
+                Previous
               </ion-button>
             </ion-col>
-            <ion-col size="4">
-              <ion-label>
+            <ion-col class="ion-justify-content-center px-0" size="4">
+              <ion-label class="pt-2">
                 {{game.date}}
               </ion-label>
+              <!-- <ion-datetime class="small-text px-0" (ionChange)="loadSchedule()" [(ngModel)]="selecteDate" [min]="seasonStartDate" [max]="seasonEndDate"></ion-datetime> -->
             </ion-col>
             <ion-col size="4">
               <ion-button style="width: 92px" (click)="nextDay()">
                 Next
-                <ion-icon slot="end" name="chevron-forward-circle-outline" ></ion-icon>
               </ion-button>
             </ion-col>
           </ion-row>
@@ -42,7 +41,8 @@
       </ion-item-divider>
 
       <ion-item-sliding *ngFor="let g of game.gamesToday">
-        <ion-item  (click)="getGameId(g.id)" routerLink="/app/tabs/schedule/session/{{g.id}}">
+          <!-- routerLink="/app/tabs/schedule/session/{{g.id}}" -->
+        <ion-item  (click)="getGameId(g.id, g.playedStatus)">
           <ion-label>
             <h3> {{g.homeTeam}} vs {{g.awayTeam}}</h3>
             <p>{{g.timeStart}}</p>
@@ -51,26 +51,4 @@
       </ion-item-sliding>
     </ion-item-group>
   </ion-list>
-
-
-
-  <ion-fab slot="fixed" vertical="bottom" horizontal="end" #fab>
-    <ion-fab-button>
-      <ion-icon name="share-social"></ion-icon>
-    </ion-fab-button>
-    <ion-fab-list side="top">
-      <ion-fab-button color="vimeo" (click)="openSocial('Vimeo', fab)">
-        <ion-icon name="logo-vimeo"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button color="instagram" (click)="openSocial('Instagram', fab)">
-        <ion-icon name="logo-instagram"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button color="twitter" (click)="openSocial('Twitter', fab)">
-        <ion-icon name="logo-twitter"></ion-icon>
-      </ion-fab-button>
-      <ion-fab-button color="facebook" (click)="openSocial('Facebook', fab)">
-        <ion-icon name="logo-facebook"></ion-icon>
-      </ion-fab-button>
-    </ion-fab-list>
-  </ion-fab>
 </ion-content>

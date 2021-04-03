@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs-page';
 import { SchedulePage } from '../schedule/schedule';
 import { HomePageModule } from '../home/home.module';
+import { AuthGuardsService } from '../../providers/guards/auth-guards.service';
 
 
 const routes: Routes = [
@@ -25,6 +26,7 @@ const routes: Routes = [
           {
             path: '',
             component: SchedulePage,
+            canActivate:[AuthGuardsService]
           },
           {
             // 
@@ -47,8 +49,9 @@ const routes: Routes = [
           {
             path: 'speaker-details/:speakerId',
             loadChildren: () => import('../player-detail/speaker-detail.module').then(m => m.SpeakerDetailModule)
-          }
-        ]
+          },
+        ],
+        canActivate:[AuthGuardsService]
       },
       {
         path: '',
