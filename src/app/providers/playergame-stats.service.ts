@@ -18,9 +18,10 @@ export class PlayergameStatsService {
   typeU = '/boxscore.json';
   statSheet;
 
+  // Insert personal API into headers: signup at mysportsfeeds.com
   httpOptions = {
     headers: new HttpHeaders({
-      'Authorization': 'Basic ' + btoa('1694b098-b008-4e48-ad0e-72fa5b:MYSPORTSFEEDS')
+      'Authorization': 'Basic ' + btoa('<APIKEY>:MYSPORTSFEEDS')
     })
   };
 
