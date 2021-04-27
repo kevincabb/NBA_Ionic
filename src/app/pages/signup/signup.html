@@ -9,14 +9,14 @@
 
 <ion-content>
 
-  <div >
-    <img class="signup-logo"src="/assets/img/freeAgency.jpg" alt="Ionic Logo">
+  <div class="d-flex justify-content-center">
+    <img class="signup-logo"src="./assets/img/freeAgency.jpg" alt="Ionic Logo">
   </div>
 
   <form #signupForm="ngForm" novalidate>
     <ion-list lines="none">
       <ion-item>
-        <ion-label position="stacked" color="primary">Username</ion-label>
+        <ion-label class="pb-2" position="stacked" color="primary">Username</ion-label>
         <ion-input [(ngModel)]="signup.username" [ngClass]="{'is-invalid': signupForm.submitted && username.invalid}"
           class="form-control" name="username" type="text" #username="ngModel" required>
         </ion-input>
@@ -26,7 +26,7 @@
       </ion-item>
 
       <ion-item>
-        <ion-label position="stacked" color="primary">Password</ion-label>
+        <ion-label class="pb-2" position="stacked" color="primary">Password</ion-label>
         <ion-input [(ngModel)]="signup.password" [ngClass]="{'is-invalid': signupForm.submitted && password.invalid}"
           class="form-control" id="password" name="password" type="password" #password="ngModel" required minlength="6">
         </ion-input>
